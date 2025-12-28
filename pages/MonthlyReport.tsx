@@ -11,7 +11,7 @@ import {
 import {
     BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Cell
 } from 'recharts';
-import { financialRecordService, recurringService } from '../services/api';
+import { financialRecordService, recurringService, userService } from '../services/api';
 import { FinancialRecord, RecurringFinancialRecord } from '../types';
 import { isDateInMonth, generateRecurringInstances, formatCurrency } from '../utils/finance';
 
@@ -30,9 +30,10 @@ export const MonthlyReport: React.FC = () => {
 
     const fetchHistory = async () => {
         setLoading(true);
-        const [records, recurring] = await Promise.all([
+        const [records, recurring, users] = await Promise.all([
             financialRecordService.getAll(),
             recurringService.getAll(),
+            userService.getUsers(),
         ]);
 
         const history: MonthlyData[] = [];
@@ -45,7 +46,7 @@ export const MonthlyReport: React.FC = () => {
             const month = d.getMonth();
 
             const manualRecords = records.filter(r => isDateInMonth(r.date, year, month));
-            const recurringInstances = generateRecurringInstances(recurring, year, month);
+            const recurringInstances = generateRecurringInstances(recurring, year, month, users);
             const allMonthRecords = [...manualRecords, ...recurringInstances];
 
             const income = allMonthRecords.filter(r => r.type === 'INCOME').reduce((s, r) => s + r.amount, 0);
