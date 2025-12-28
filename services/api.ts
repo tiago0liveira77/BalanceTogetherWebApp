@@ -38,20 +38,13 @@ export const userService = {
 
 export const financialRecordService = {
   getAll: async (): Promise<FinancialRecord[]> => {
-    const data = localStorage.getItem(STORAGE_KEYS.RECORDS);
-    return data ? JSON.parse(data) : [];
+    return apiClient.get<FinancialRecord[]>('/financial-records');
   },
   create: async (record: Omit<FinancialRecord, 'id'>): Promise<FinancialRecord> => {
-    const records = await financialRecordService.getAll();
-    const newRecord = { ...record, id: Math.random().toString(36).substr(2, 9) };
-    records.push(newRecord);
-    localStorage.setItem(STORAGE_KEYS.RECORDS, JSON.stringify(records));
-    return newRecord;
+    return apiClient.post<FinancialRecord>('/financial-records', record);
   },
-  delete: async (id: string): Promise<void> => {
-    const records = await financialRecordService.getAll();
-    const filtered = records.filter(r => r.id !== id);
-    localStorage.setItem(STORAGE_KEYS.RECORDS, JSON.stringify(filtered));
+  delete: async (id: number): Promise<void> => {
+    return apiClient.delete(`/financial-records/${id}`);
   }
 };
 
@@ -62,12 +55,12 @@ export const categoryService = {
   },
   create: async (category: Omit<Category, 'id' | 'isSystem'>): Promise<Category> => {
     const categories = await categoryService.getAll();
-    const newCategory = { ...category, id: `cat-${Date.now()}`, isSystem: false };
+    const newCategory = { ...category, id: Date.now(), isSystem: false };
     categories.push(newCategory);
     localStorage.setItem(STORAGE_KEYS.CATEGORIES, JSON.stringify(categories));
     return newCategory;
   },
-  delete: async (id: string): Promise<void> => {
+  delete: async (id: number): Promise<void> => {
     const categories = await categoryService.getAll();
     const filtered = categories.filter(c => c.id !== id || c.isSystem);
     localStorage.setItem(STORAGE_KEYS.CATEGORIES, JSON.stringify(filtered));
@@ -81,12 +74,12 @@ export const recurringService = {
   },
   create: async (record: Omit<RecurringFinancialRecord, 'id'>): Promise<RecurringFinancialRecord> => {
     const recurring = await recurringService.getAll();
-    const newRecord = { ...record, id: `rec-${Date.now()}` };
+    const newRecord = { ...record, id: Date.now() };
     recurring.push(newRecord);
     localStorage.setItem(STORAGE_KEYS.RECURRING, JSON.stringify(recurring));
     return newRecord;
   },
-  delete: async (id: string): Promise<void> => {
+  delete: async (id: number): Promise<void> => {
     const recurring = await recurringService.getAll();
     const filtered = recurring.filter(r => r.id !== id);
     localStorage.setItem(STORAGE_KEYS.RECURRING, JSON.stringify(filtered));

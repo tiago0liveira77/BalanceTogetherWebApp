@@ -9,34 +9,34 @@ export interface User {
 }
 
 export interface Household {
-  id: string;
+  id: number;
   name: string;
   users: User[];
 }
 
 export interface Category {
-  id: string;
+  id: number;
   name: string;
   type: RecordType;
   isSystem: boolean;
 }
 
 export interface FinancialRecord {
-  id: string;
+  id: number;
   type: RecordType;
   amount: number;
   date: string; // ISO date YYYY-MM-DD
   description?: string;
-  categoryId: string;
-  householdId: string;
+  categoryId: number;
+  householdId: number;
   payerUserId: number; // Quem pagou ou recebeu
 }
 
 export interface RecurringFinancialRecord {
-  id: string;
+  id: number;
   type: RecordType;
   amount: number;
-  categoryId: string;
+  categoryId: number;
   startDate: string;
   endDate?: string;
   frequency: FrequencyType;
@@ -45,11 +45,11 @@ export interface RecurringFinancialRecord {
 }
 
 export interface BankTransaction {
-  id: string;
+  id: number;
   externalReference: string;
   date: string;
   amount: number;
   description: string;
   rawData: Record<string, any>;
-  matchedRecordId?: string;
+  matchedRecordId?: number;
 }

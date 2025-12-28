@@ -47,14 +47,26 @@ export const generateRecurringInstances = (
           }
         }
 
+        // Generate a deterministic negative ID to avoid collision with real backend IDs
+        // Form: -(year * 10000 + month * 100 + day) ... or hash string
+        // Simple hash of string ID:
+        const idString = `recurring-${rec.id}-${year}-${month}`;
+        let hash = 0;
+        for (let i = 0; i < idString.length; i++) {
+          const char = idString.charCodeAt(i);
+          hash = ((hash << 5) - hash) + char;
+          hash = hash & hash; // Convert to 32bit integer
+        }
+        const virtualId = -Math.abs(hash || 1); // Ensure negative and non-zero
+
         instances.push({
-          id: `recurring-${rec.id}-${year}-${month}`,
+          id: virtualId,
           type: rec.type,
           amount: rec.amount,
           date: instanceDate.toISOString().split('T')[0],
           description: `[Fixo${rec.frequency === 'MONTHLY_ALTERNATING' ? ' Alt' : ''}] ${rec.description || ''}`,
           categoryId: rec.categoryId,
-          householdId: 'hh-1',
+          householdId: 1,
           payerUserId: finalPayerId
         });
       }

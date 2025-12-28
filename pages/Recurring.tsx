@@ -43,20 +43,22 @@ export const Recurring: React.FC = () => {
     await recurringService.create({
       ...formData,
       amount: parseFloat(formData.amount),
+      categoryId: Number(formData.categoryId),
+      payerUserId: Number(formData.payerUserId)
     });
     setShowForm(false);
     fetchData();
   };
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (id: number) => {
     if (window.confirm('Tem a certeza que deseja apagar esta recorrência? Todos os lançamentos futuros deixarão de ser calculados.')) {
       await recurringService.delete(id);
       fetchData();
     }
   };
 
-  const getCategoryName = (id: string) => categories.find(c => c.id === id)?.name || 'N/A';
-  const getUserName = (id: string) => users.find(u => u.id === id)?.name || 'N/A';
+  const getCategoryName = (id: number) => categories.find(c => c.id === id)?.name || 'N/A';
+  const getUserName = (id: number) => users.find(u => u.id === id)?.name || 'N/A';
 
   return (
     <div className="space-y-6">

@@ -47,7 +47,7 @@ export const Records: React.FC = () => {
 
   useEffect(() => { fetchRecords(); }, []);
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (id: number) => {
     if (window.confirm('Tem a certeza que deseja apagar este registo?')) {
       await financialRecordService.delete(id);
       fetchRecords();
@@ -59,7 +59,7 @@ export const Records: React.FC = () => {
       const matchesSearch = r.description?.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesType = filterType === 'ALL' || r.type === filterType;
       const matchesUser = filterUser === 'ALL' || r.payerUserId.toString() === filterUser;
-      const matchesCategory = filterCategory === 'ALL' || r.categoryId === filterCategory;
+      const matchesCategory = filterCategory === 'ALL' || r.categoryId.toString() === filterCategory;
       const matchesFrom = !dateFrom || new Date(r.date) >= new Date(dateFrom);
       const matchesTo = !dateTo || new Date(r.date) <= new Date(dateTo);
 

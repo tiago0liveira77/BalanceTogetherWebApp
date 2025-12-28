@@ -39,7 +39,7 @@ export const NewRecord: React.FC = () => {
       date: formData.date,
       description: formData.description,
       categoryId: formData.categoryId,
-      householdId: 'hh-1',
+      householdId: '1',
       payerUserId: formData.payerUserId
     });
     navigate('/records');

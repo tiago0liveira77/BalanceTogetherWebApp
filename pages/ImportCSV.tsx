@@ -42,7 +42,7 @@ export const ImportCSV: React.FC = () => {
         date: new Date().toISOString().split('T')[0],
         description: `Importado: ${row[2]}`,
         categoryId: defaultCat.id,
-        householdId: 'hh-1',
+        householdId: 1,
         payerUserId: user.id
       });
     }
