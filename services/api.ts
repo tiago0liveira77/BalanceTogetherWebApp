@@ -4,10 +4,10 @@ import { INITIAL_CATEGORIES, DEFAULT_USERS } from '../constants';
 import { apiClient } from './apiClient';
 
 const STORAGE_KEYS = {
-  RECORDS: 'duofin_records',
-  CATEGORIES: 'duofin_categories',
-  RECURRING: 'duofin_recurring',
-  USERS: 'duofin_users'
+  RECORDS: 'BalanceTogether_records',
+  CATEGORIES: 'BalanceTogether_categories',
+  RECURRING: 'BalanceTogether_recurring',
+  USERS: 'BalanceTogether_users'
 };
 
 const initializeStorage = () => {
@@ -62,19 +62,12 @@ export const categoryService = {
 
 export const recurringService = {
   getAll: async (): Promise<RecurringFinancialRecord[]> => {
-    const data = localStorage.getItem(STORAGE_KEYS.RECURRING);
-    return data ? JSON.parse(data) : [];
+    return apiClient.get<RecurringFinancialRecord[]>('/recurring-records');
   },
   create: async (record: Omit<RecurringFinancialRecord, 'id'>): Promise<RecurringFinancialRecord> => {
-    const recurring = await recurringService.getAll();
-    const newRecord = { ...record, id: Date.now() };
-    recurring.push(newRecord);
-    localStorage.setItem(STORAGE_KEYS.RECURRING, JSON.stringify(recurring));
-    return newRecord;
+    return apiClient.post<RecurringFinancialRecord>('/recurring-records', record);
   },
   delete: async (id: number): Promise<void> => {
-    const recurring = await recurringService.getAll();
-    const filtered = recurring.filter(r => r.id !== id);
-    localStorage.setItem(STORAGE_KEYS.RECURRING, JSON.stringify(filtered));
+    return apiClient.delete(`/recurring-records/${id}`);
   }
 };

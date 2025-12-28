@@ -1,12 +1,12 @@
 
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { 
-  LayoutDashboard, 
-  Receipt, 
-  Repeat, 
-  Tags, 
-  Upload, 
+import {
+  LayoutDashboard,
+  Receipt,
+  Repeat,
+  Tags,
+  Upload,
   Settings,
   Menu,
   X,
@@ -34,7 +34,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
       <div className="md:hidden flex items-center justify-between p-4 bg-white border-b sticky top-0 z-50">
         <div className="font-bold text-xl text-indigo-600 flex items-center gap-2">
           <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-black">D</div>
-          DuoFin
+          BalanceTogether
         </div>
         <button onClick={toggleSidebar} className="p-2 text-gray-600">
           {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
@@ -51,8 +51,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
       `}>
         <div className="p-6">
           <div className="font-bold text-2xl text-indigo-600 hidden md:flex items-center gap-2 mb-8">
-            <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white font-black">D</div>
-            DuoFin
+            BalanceTogether
           </div>
 
           <nav className="space-y-1">
@@ -66,8 +65,8 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
                   onClick={() => setIsSidebarOpen(false)}
                   className={`
                     flex items-center gap-3 px-4 py-3 rounded-xl transition-all
-                    ${isActive 
-                      ? 'bg-indigo-50 text-indigo-700 font-semibold' 
+                    ${isActive
+                      ? 'bg-indigo-50 text-indigo-700 font-semibold'
                       : 'text-gray-600 hover:bg-gray-50'}
                   `}
                 >

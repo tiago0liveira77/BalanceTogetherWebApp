@@ -1,5 +1,5 @@
 {
-  "name": "DuoFin - Household Finance Tracker",
+  "name": "BalanceTogether - Household Finance Tracker",
   "description": "A comprehensive React-based financial management application for couples to track individual and shared expenses, income, recurring payments, and bank imports.",
   "requestFramePermissions": []
 }
