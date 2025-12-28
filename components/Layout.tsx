@@ -10,7 +10,8 @@ import {
   Settings,
   Menu,
   X,
-  PlusCircle
+  PlusCircle,
+  BarChart3
 } from 'lucide-react';
 
 const navItems = [
@@ -18,6 +19,7 @@ const navItems = [
   { path: '/records', label: 'Registos', icon: Receipt },
   { path: '/recurring', label: 'Recorrentes', icon: Repeat },
   { path: '/categories', label: 'Categorias', icon: Tags },
+  { path: '/reports', label: 'Relatórios', icon: BarChart3 },
   { path: '/import', label: 'Importar', icon: Upload },
   { path: '/settings', label: 'Definições', icon: Settings },
 ];

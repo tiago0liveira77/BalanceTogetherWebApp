@@ -9,6 +9,7 @@ import { ImportCSV } from './pages/ImportCSV';
 import { Recurring } from './pages/Recurring';
 import { Categories } from './pages/Categories';
 import { Settings } from './pages/Settings';
+import { MonthlyReport } from './pages/MonthlyReport';
 
 const App: React.FC = () => {
   return (
@@ -19,6 +20,7 @@ const App: React.FC = () => {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/records" element={<Records />} />
           <Route path="/records/new" element={<NewRecord />} />
+          <Route path="/reports" element={<MonthlyReport />} />
           <Route path="/recurring" element={<Recurring />} />
           <Route path="/categories" element={<Categories />} />
           <Route path="/import" element={<ImportCSV />} />
