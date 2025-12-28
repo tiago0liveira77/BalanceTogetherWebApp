@@ -2,8 +2,8 @@
 import { Category } from './types';
 
 export const DEFAULT_USERS = [
-  { id: 'user-1', name: 'Utilizador 1', email: 'u1@exemplo.pt' },
-  { id: 'user-2', name: 'Utilizador 2', email: 'u2@exemplo.pt' }
+  { id: 1, name: 'Utilizador 1', email: 'u1@exemplo.pt' },
+  { id: 2, name: 'Utilizador 2', email: 'u2@exemplo.pt' }
 ];
 
 export const INITIAL_CATEGORIES: Category[] = [

@@ -9,15 +9,18 @@ export const Settings: React.FC = () => {
   const [names, setNames] = useState<Record<string, string>>({});
 
   useEffect(() => {
-    const current = userService.getUsers();
-    setUsers(current);
-    const initialNames: Record<string, string> = {};
-    current.forEach(u => initialNames[u.id] = u.name);
-    setNames(initialNames);
+    const loadUsers = async () => {
+      const current = await userService.getUsers();
+      setUsers(current);
+      const initialNames: Record<string, string> = {};
+      current.forEach(u => initialNames[u.id.toString()] = u.name);
+      setNames(initialNames);
+    };
+    loadUsers();
   }, []);
 
-  const handleSave = (id: string) => {
-    userService.updateUser(id, names[id]);
+  const handleSave = async (id: number) => {
+    await userService.updateUser(id, names[id.toString()]);
     alert('Nome atualizado com sucesso!');
   };
 
@@ -36,25 +39,25 @@ export const Settings: React.FC = () => {
               <div className="flex-1 space-y-2">
                 <label className="text-sm font-semibold">Nome de Exibição</label>
                 <div className="relative">
-                  <UserIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18}/>
-                  <input 
+                  <UserIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                  <input
                     type="text" className="w-full pl-10 pr-4 py-2 bg-gray-50 rounded-lg border-none focus:ring-2 focus:ring-indigo-500"
-                    value={names[user.id] || ''} 
-                    onChange={e => setNames({...names, [user.id]: e.target.value})}
+                    value={names[user.id] || ''}
+                    onChange={e => setNames({ ...names, [user.id]: e.target.value })}
                   />
                 </div>
               </div>
-              <button 
+              <button
                 onClick={() => handleSave(user.id)}
                 className="bg-indigo-600 text-white p-2 rounded-lg hover:bg-indigo-700 transition-all"
               >
-                <Save size={20}/>
+                <Save size={20} />
               </button>
             </div>
           </div>
         ))}
       </div>
-      
+
       <div className="p-6 bg-indigo-50 rounded-2xl text-indigo-700 text-sm">
         <strong>Nota:</strong> Estas definições são locais e alteram como os nomes aparecem nos gráficos e tabelas de registos.
       </div>

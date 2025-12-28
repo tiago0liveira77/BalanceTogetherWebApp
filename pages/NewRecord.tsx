@@ -15,14 +15,18 @@ export const NewRecord: React.FC = () => {
     date: new Date().toISOString().split('T')[0],
     description: '',
     categoryId: '',
-    payerUserId: '',
+    payerUserId: 0 as number | string,
   });
 
   useEffect(() => {
-    categoryService.getAll().then(setCategories);
-    const u = userService.getUsers();
-    setUsers(u);
-    setFormData(prev => ({ ...prev, payerUserId: u[0].id }));
+    Promise.all([
+      categoryService.getAll(),
+      userService.getUsers()
+    ]).then(([fetchedCategories, fetchedUsers]) => {
+      setCategories(fetchedCategories);
+      setUsers(fetchedUsers);
+      setFormData(prev => ({ ...prev, payerUserId: fetchedUsers[0]?.id || '' }));
+    });
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -60,11 +64,10 @@ export const NewRecord: React.FC = () => {
                 key={type}
                 type="button"
                 onClick={() => setFormData({ ...formData, type: type as any, categoryId: '' })}
-                className={`flex-1 py-4 rounded-xl font-bold transition-all ${
-                  formData.type === type 
-                  ? (type === 'EXPENSE' ? 'bg-indigo-600 text-white' : 'bg-emerald-600 text-white') 
+                className={`flex-1 py-4 rounded-xl font-bold transition-all ${formData.type === type
+                  ? (type === 'EXPENSE' ? 'bg-indigo-600 text-white' : 'bg-emerald-600 text-white')
                   : 'bg-gray-100 text-gray-500'
-                }`}
+                  }`}
               >
                 {type === 'EXPENSE' ? 'Despesa' : 'Receita'}
               </button>
@@ -73,7 +76,7 @@ export const NewRecord: React.FC = () => {
 
           <div className="grid grid-cols-2 gap-6">
             <div className="space-y-2">
-              <label className="text-sm font-semibold flex items-center gap-2"><Wallet size={16}/> Montante</label>
+              <label className="text-sm font-semibold flex items-center gap-2"><Wallet size={16} /> Montante</label>
               <input
                 type="number" step="0.01" required
                 className="w-full px-4 py-3 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-indigo-500"
@@ -82,7 +85,7 @@ export const NewRecord: React.FC = () => {
               />
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-semibold flex items-center gap-2"><Calendar size={16}/> Data</label>
+              <label className="text-sm font-semibold flex items-center gap-2"><Calendar size={16} /> Data</label>
               <input
                 type="date" required
                 className="w-full px-4 py-3 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-indigo-500"
@@ -122,18 +125,17 @@ export const NewRecord: React.FC = () => {
                 <button
                   key={user.id} type="button"
                   onClick={() => setFormData({ ...formData, payerUserId: user.id })}
-                  className={`flex-1 py-2 px-4 rounded-lg text-sm transition-all flex items-center justify-center gap-2 ${
-                    formData.payerUserId === user.id ? 'bg-gray-800 text-white font-bold' : 'bg-gray-100 text-gray-500'
-                  }`}
+                  className={`flex-1 py-2 px-4 rounded-lg text-sm transition-all flex items-center justify-center gap-2 ${formData.payerUserId === user.id ? 'bg-gray-800 text-white font-bold' : 'bg-gray-100 text-gray-500'
+                    }`}
                 >
-                  <User size={14}/> {user.name}
+                  <User size={14} /> {user.name}
                 </button>
               ))}
             </div>
           </div>
 
           <button type="submit" className="w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-lg flex items-center justify-center gap-2">
-            <Save size={20}/> Guardar Registo
+            <Save size={20} /> Guardar Registo
           </button>
         </form>
       </div>

@@ -1,10 +1,10 @@
 
 import React, { useState } from 'react';
-import { 
-  Upload, 
-  FileText, 
-  AlertCircle, 
-  CheckCircle2, 
+import {
+  Upload,
+  FileText,
+  AlertCircle,
+  CheckCircle2,
   ChevronRight,
   Database
 } from 'lucide-react';
@@ -33,7 +33,7 @@ export const ImportCSV: React.FC = () => {
     const recordsToImport = csvPreview.slice(1);
     const cats = await categoryService.getAll();
     const defaultCat = cats[0];
-    const user = userService.getUsers()[0];
+    const user = (await userService.getUsers())[0];
 
     for (const row of recordsToImport) {
       await financialRecordService.create({
@@ -63,9 +63,8 @@ export const ImportCSV: React.FC = () => {
       <div className="flex items-center gap-4">
         {[1, 2, 3].map(i => (
           <div key={i} className="flex items-center gap-2">
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${
-              step >= i ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-500'
-            }`}>{i}</div>
+            <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${step >= i ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-500'
+              }`}>{i}</div>
             {i < 3 && <ChevronRight className="text-gray-300" size={16} />}
           </div>
         ))}
@@ -78,7 +77,7 @@ export const ImportCSV: React.FC = () => {
             <h3 className="text-lg font-bold">Selecione o Ficheiro CSV</h3>
             <p className="text-gray-500">Os dados são processados apenas localmente.</p>
           </div>
-          <input type="file" id="csv-upload" accept=".csv" className="hidden" onChange={handleFileUpload}/>
+          <input type="file" id="csv-upload" accept=".csv" className="hidden" onChange={handleFileUpload} />
           <label htmlFor="csv-upload" className="bg-indigo-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-indigo-700 cursor-pointer">Escolher Ficheiro</label>
         </div>
       )}
@@ -86,7 +85,7 @@ export const ImportCSV: React.FC = () => {
       {step === 2 && (
         <div className="bg-white rounded-2xl border overflow-hidden shadow-sm">
           <div className="p-6 border-b flex justify-between items-center">
-            <h3 className="font-bold flex items-center gap-2"><FileText size={20}/> Pré-visualização</h3>
+            <h3 className="font-bold flex items-center gap-2"><FileText size={20} /> Pré-visualização</h3>
             <span className="text-xs font-bold text-amber-600 bg-amber-50 px-3 py-1 rounded-full uppercase">Mapeamento Padrão</span>
           </div>
           <div className="overflow-x-auto max-h-96">
@@ -114,7 +113,7 @@ export const ImportCSV: React.FC = () => {
 
       {step === 3 && (
         <div className="bg-white p-12 rounded-2xl border text-center space-y-6">
-          <div className="w-20 h-20 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto"><CheckCircle2 size={40}/></div>
+          <div className="w-20 h-20 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto"><CheckCircle2 size={40} /></div>
           <h2 className="text-2xl font-bold">Importação Concluída!</h2>
           <div className="flex gap-4 justify-center">
             <button onClick={() => window.location.hash = '#/records'} className="bg-gray-100 px-6 py-3 rounded-xl font-bold">Ver Registos</button>

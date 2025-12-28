@@ -10,11 +10,11 @@ export const isDateInMonth = (dateStr: string, year: number, month: number) => {
 export const generateRecurringInstances = (
   recurring: RecurringFinancialRecord[],
   year: number,
-  month: number
+  month: number,
+  users: User[]
 ): FinancialRecord[] => {
   const instances: FinancialRecord[] = [];
-  const users = userService.getUsers();
-  
+
   recurring.forEach(rec => {
     const start = new Date(rec.startDate);
     const targetMonthStart = new Date(year, month, 1);
@@ -27,10 +27,10 @@ export const generateRecurringInstances = (
 
     if (rec.frequency === 'MONTHLY' || rec.frequency === 'MONTHLY_ALTERNATING') {
       const instanceDate = new Date(year, month, start.getUTCDate());
-      
+
       // Ajustar se o dia do mês não existir (ex: 31 de Fevereiro)
       if (instanceDate.getUTCMonth() !== month) {
-         instanceDate.setUTCDate(0); 
+        instanceDate.setUTCDate(0);
       }
 
       if (instanceDate >= start && (!rec.endDate || instanceDate <= new Date(rec.endDate))) {
@@ -39,7 +39,7 @@ export const generateRecurringInstances = (
         if (rec.frequency === 'MONTHLY_ALTERNATING') {
           // Calcular diferença de meses
           const monthDiff = (year * 12 + month) - (start.getFullYear() * 12 + start.getMonth());
-          
+
           if (monthDiff % 2 !== 0) {
             // Mês ímpar de diferença: troca para o outro utilizador
             const otherUser = users.find(u => u.id !== rec.payerUserId);

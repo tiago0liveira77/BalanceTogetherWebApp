@@ -1,10 +1,10 @@
 
 import React, { useState, useEffect } from 'react';
-import { 
-  ArrowUpRight, 
-  ArrowDownRight, 
-  Wallet, 
-  ChevronLeft, 
+import {
+  ArrowUpRight,
+  ArrowDownRight,
+  Wallet,
+  ChevronLeft,
   ChevronRight,
   User as UserIcon
 } from 'lucide-react';
@@ -28,13 +28,13 @@ export const Dashboard: React.FC = () => {
       categoryService.getAll(),
       recurringService.getAll(),
     ]);
-    
-    const currentUsers = userService.getUsers();
+
+    const currentUsers = await userService.getUsers();
     setUsers(currentUsers);
 
     const manualRecords = fetchedRecords.filter(r => isDateInMonth(r.date, year, month));
-    const recurringInstances = generateRecurringInstances(fetchedRecurring, year, month);
-    
+    const recurringInstances = generateRecurringInstances(fetchedRecurring, year, month, currentUsers);
+
     setCategories(fetchedCategories);
     setAllMonthlyRecords([...manualRecords, ...recurringInstances]);
   };
@@ -57,7 +57,7 @@ export const Dashboard: React.FC = () => {
           <h1 className="text-3xl font-bold text-gray-900 text-balance">Resumo Financeiro</h1>
           <p className="text-gray-500 mt-1">Gestão de gastos do agregado familiar.</p>
         </div>
-        
+
         <div className="flex items-center gap-2 bg-white p-1 rounded-xl shadow-sm border border-gray-100">
           <button onClick={prevMonth} className="p-2 hover:bg-gray-50 rounded-lg"><ChevronLeft size={20} /></button>
           <span className="font-semibold px-4 min-w-[160px] text-center capitalize">

@@ -1,11 +1,11 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { 
-  Plus, 
-  Search, 
-  Trash2, 
-  ArrowUpCircle, 
+import {
+  Plus,
+  Search,
+  Trash2,
+  ArrowUpCircle,
   ArrowDownCircle,
   Filter,
   ChevronLeft,
@@ -26,13 +26,13 @@ export const Records: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState<'ALL' | 'INCOME' | 'EXPENSE'>('ALL');
-  const [filterUser, setFilterUser] = useState<string>('ALL');
+  const [filterUser, setFilterUser] = useState<string>('ALL'); // Selected value from select is string often, but ID is number. Keep string 'ALL' or '1'
   const [filterCategory, setFilterCategory] = useState<string>('ALL');
   const [dateFrom, setDateFrom] = useState<string>('');
   const [dateTo, setDateTo] = useState<string>('');
   const [currentPage, setCurrentPage] = useState(1);
   const [showFilters, setShowFilters] = useState(false);
-  
+
   const navigate = useNavigate();
 
   const fetchRecords = async () => {
@@ -40,7 +40,7 @@ export const Records: React.FC = () => {
       financialRecordService.getAll(),
       categoryService.getAll(),
     ]);
-    setUsers(userService.getUsers());
+    setUsers(await userService.getUsers());
     setRecords(r.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()));
     setCategories(c);
   };
@@ -58,7 +58,7 @@ export const Records: React.FC = () => {
     return records.filter(r => {
       const matchesSearch = r.description?.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesType = filterType === 'ALL' || r.type === filterType;
-      const matchesUser = filterUser === 'ALL' || r.payerUserId === filterUser;
+      const matchesUser = filterUser === 'ALL' || r.payerUserId.toString() === filterUser;
       const matchesCategory = filterCategory === 'ALL' || r.categoryId === filterCategory;
       const matchesFrom = !dateFrom || new Date(r.date) >= new Date(dateFrom);
       const matchesTo = !dateTo || new Date(r.date) <= new Date(dateTo);
@@ -85,7 +85,7 @@ export const Records: React.FC = () => {
           <h1 className="text-2xl font-bold">Registos Financeiros</h1>
           <p className="text-sm text-gray-500">Consulte e filtre todos os movimentos da conta.</p>
         </div>
-        <button 
+        <button
           onClick={() => navigate('/records/new')}
           className="flex items-center justify-center gap-2 bg-indigo-600 text-white px-5 py-2.5 rounded-xl hover:bg-indigo-700 transition-all shadow-md active:scale-95"
         >
@@ -105,11 +105,10 @@ export const Records: React.FC = () => {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        <button 
+        <button
           onClick={() => setShowFilters(!showFilters)}
-          className={`flex items-center gap-2 px-6 py-3 rounded-xl border transition-all font-medium ${
-            showFilters ? 'bg-indigo-50 border-indigo-200 text-indigo-700' : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50'
-          }`}
+          className={`flex items-center gap-2 px-6 py-3 rounded-xl border transition-all font-medium ${showFilters ? 'bg-indigo-50 border-indigo-200 text-indigo-700' : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50'
+            }`}
         >
           <Filter size={18} />
           {showFilters ? 'Ocultar Filtros' : 'Filtros Avançados'}
@@ -123,7 +122,7 @@ export const Records: React.FC = () => {
             <label className="text-xs font-bold text-gray-400 uppercase flex items-center gap-2">
               <ArrowUpCircle size={14} /> Tipo
             </label>
-            <select 
+            <select
               value={filterType}
               onChange={(e) => setFilterType(e.target.value as any)}
               className="w-full p-2.5 bg-gray-50 border-none rounded-lg focus:ring-2 focus:ring-indigo-500"
@@ -138,7 +137,7 @@ export const Records: React.FC = () => {
             <label className="text-xs font-bold text-gray-400 uppercase flex items-center gap-2">
               <UserIcon size={14} /> Utilizador
             </label>
-            <select 
+            <select
               value={filterUser}
               onChange={(e) => setFilterUser(e.target.value)}
               className="w-full p-2.5 bg-gray-50 border-none rounded-lg focus:ring-2 focus:ring-indigo-500"
@@ -152,7 +151,7 @@ export const Records: React.FC = () => {
             <label className="text-xs font-bold text-gray-400 uppercase flex items-center gap-2">
               <Tag size={14} /> Categoria
             </label>
-            <select 
+            <select
               value={filterCategory}
               onChange={(e) => setFilterCategory(e.target.value)}
               className="w-full p-2.5 bg-gray-50 border-none rounded-lg focus:ring-2 focus:ring-indigo-500"
@@ -167,15 +166,15 @@ export const Records: React.FC = () => {
               <Calendar size={14} /> Intervalo de Datas
             </label>
             <div className="flex items-center gap-2">
-              <input 
-                type="date" 
-                className="w-full p-2 bg-gray-50 border-none rounded-lg text-xs" 
+              <input
+                type="date"
+                className="w-full p-2 bg-gray-50 border-none rounded-lg text-xs"
                 value={dateFrom}
                 onChange={(e) => setDateFrom(e.target.value)}
               />
               <span className="text-gray-300">-</span>
-              <input 
-                type="date" 
+              <input
+                type="date"
                 className="w-full p-2 bg-gray-50 border-none rounded-lg text-xs"
                 value={dateTo}
                 onChange={(e) => setDateTo(e.target.value)}
@@ -225,8 +224,8 @@ export const Records: React.FC = () => {
                     </span>
                   </td>
                   <td className="px-6 py-4 text-center">
-                    <button 
-                      onClick={() => handleDelete(record.id)} 
+                    <button
+                      onClick={() => handleDelete(record.id)}
                       className="p-2 text-gray-300 hover:text-rose-500 hover:bg-rose-50 rounded-lg transition-all"
                     >
                       <Trash2 size={18} />
@@ -251,7 +250,7 @@ export const Records: React.FC = () => {
               A mostrar <span className="text-gray-900">{(currentPage - 1) * ITEMS_PER_PAGE + 1}</span> a <span className="text-gray-900">{Math.min(currentPage * ITEMS_PER_PAGE, filteredRecords.length)}</span> de <span className="text-gray-900">{filteredRecords.length}</span> registos
             </p>
             <div className="flex items-center gap-2">
-              <button 
+              <button
                 disabled={currentPage === 1}
                 onClick={() => setCurrentPage(prev => prev - 1)}
                 className="p-2 rounded-lg border bg-white disabled:opacity-30 hover:bg-gray-50 transition-colors"
@@ -263,17 +262,16 @@ export const Records: React.FC = () => {
                   <button
                     key={page}
                     onClick={() => setCurrentPage(page)}
-                    className={`w-8 h-8 rounded-lg text-xs font-bold transition-all ${
-                      currentPage === page 
-                      ? 'bg-indigo-600 text-white shadow-md' 
+                    className={`w-8 h-8 rounded-lg text-xs font-bold transition-all ${currentPage === page
+                      ? 'bg-indigo-600 text-white shadow-md'
                       : 'bg-white border text-gray-600 hover:bg-gray-50'
-                    }`}
+                      }`}
                   >
                     {page}
                   </button>
                 ))}
               </div>
-              <button 
+              <button
                 disabled={currentPage === totalPages}
                 onClick={() => setCurrentPage(prev => prev + 1)}
                 className="p-2 rounded-lg border bg-white disabled:opacity-30 hover:bg-gray-50 transition-colors"

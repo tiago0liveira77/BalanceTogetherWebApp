@@ -1,6 +1,7 @@
 
 import { FinancialRecord, Category, RecurringFinancialRecord, User } from '../types';
 import { INITIAL_CATEGORIES, DEFAULT_USERS } from '../constants';
+import { apiClient } from './apiClient';
 
 const STORAGE_KEYS = {
   RECORDS: 'duofin_records',
@@ -27,15 +28,11 @@ const initializeStorage = () => {
 initializeStorage();
 
 export const userService = {
-  getUsers: (): User[] => {
-    const data = localStorage.getItem(STORAGE_KEYS.USERS);
-    return data ? JSON.parse(data) : DEFAULT_USERS;
+  getUsers: async (): Promise<User[]> => {
+    return apiClient.get<User[]>('/users');
   },
-  updateUser: (id: string, name: string) => {
-    const users = userService.getUsers();
-    const updated = users.map(u => u.id === id ? { ...u, name } : u);
-    localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(updated));
-    return updated;
+  updateUser: async (id: number, name: string) => {
+    return apiClient.post<User[]>('/users', { id, name });
   }
 };
 

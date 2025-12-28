@@ -3,7 +3,7 @@ export type RecordType = "EXPENSE" | "INCOME";
 export type FrequencyType = "WEEKLY" | "MONTHLY" | "YEARLY" | "MONTHLY_ALTERNATING";
 
 export interface User {
-  id: string;
+  id: number;
   name: string;
   email: string;
 }
@@ -29,7 +29,7 @@ export interface FinancialRecord {
   description?: string;
   categoryId: string;
   householdId: string;
-  payerUserId: string; // Quem pagou ou recebeu
+  payerUserId: number; // Quem pagou ou recebeu
 }
 
 export interface RecurringFinancialRecord {
@@ -41,7 +41,7 @@ export interface RecurringFinancialRecord {
   endDate?: string;
   frequency: FrequencyType;
   description?: string;
-  payerUserId: string;
+  payerUserId: number;
 }
 
 export interface BankTransaction {
