@@ -50,20 +50,13 @@ export const financialRecordService = {
 
 export const categoryService = {
   getAll: async (): Promise<Category[]> => {
-    const data = localStorage.getItem(STORAGE_KEYS.CATEGORIES);
-    return data ? JSON.parse(data) : [];
+    return apiClient.get<Category[]>('/categories');
   },
   create: async (category: Omit<Category, 'id' | 'isSystem'>): Promise<Category> => {
-    const categories = await categoryService.getAll();
-    const newCategory = { ...category, id: Date.now(), isSystem: false };
-    categories.push(newCategory);
-    localStorage.setItem(STORAGE_KEYS.CATEGORIES, JSON.stringify(categories));
-    return newCategory;
+    return apiClient.post<Category>('/categories', category);
   },
   delete: async (id: number): Promise<void> => {
-    const categories = await categoryService.getAll();
-    const filtered = categories.filter(c => c.id !== id || c.isSystem);
-    localStorage.setItem(STORAGE_KEYS.CATEGORIES, JSON.stringify(filtered));
+    return apiClient.delete(`/categories/${id}`);
   }
 };
 
