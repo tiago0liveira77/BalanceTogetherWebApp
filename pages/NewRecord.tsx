@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Save, User, Wallet, Calendar } from 'lucide-react';
+import { ArrowLeft, Save, User, Wallet, Calendar, CheckCircle } from 'lucide-react';
 import { financialRecordService, categoryService, userService } from '../services/api';
 import { Category, RecordType, User as UserType } from '../types';
 
@@ -9,6 +9,7 @@ export const NewRecord: React.FC = () => {
   const navigate = useNavigate();
   const [categories, setCategories] = useState<Category[]>([]);
   const [users, setUsers] = useState<UserType[]>([]);
+  const [successMessage, setSuccessMessage] = useState(false);
   const [formData, setFormData] = useState({
     type: 'EXPENSE' as RecordType,
     amount: '',
@@ -42,7 +43,21 @@ export const NewRecord: React.FC = () => {
       householdId: '1',
       payerUserId: formData.payerUserId
     });
-    navigate('/records');
+
+    // Manter a data do último registo e limpar os outros campos
+    const lastDate = formData.date;
+    setFormData({
+      type: formData.type,
+      amount: '',
+      date: lastDate,
+      description: '',
+      categoryId: '',
+      payerUserId: formData.payerUserId,
+    });
+
+    // Mostrar mensagem de sucesso
+    setSuccessMessage(true);
+    setTimeout(() => setSuccessMessage(false), 3000);
   };
 
   return (
@@ -50,6 +65,13 @@ export const NewRecord: React.FC = () => {
       <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-gray-500 hover:text-indigo-600">
         <ArrowLeft size={20} /> Voltar
       </button>
+
+      {successMessage && (
+        <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 flex items-center gap-3 text-emerald-700 font-semibold">
+          <CheckCircle size={20} />
+          Registo guardado com sucesso!
+        </div>
+      )}
 
       <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
         <div className="p-8 border-b bg-gray-50">
